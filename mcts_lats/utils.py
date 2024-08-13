@@ -30,4 +30,4 @@ init_prompt = """You are a VERY SMART AI who is very good at solving puzzles. Be
 Identify the patterns."
 Hint: imagine the problem as a grid. Each number represents a different color. Imagine it visually and identify the pattern. Be very careful with the shape of the grids and identify the patterns for the inputs and outputs."
 The pattern should be consistent to all the examples so if you apply it to the example inputs, you get the corresponding example outputs."
-The result should be the output for the test input case."""
+The output should be the a list of the non-trivial transformation rules."""

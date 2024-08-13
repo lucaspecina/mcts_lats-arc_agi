@@ -27,19 +27,25 @@ from collections import deque
 from typing import Optional
 from typing_extensions import TypedDict
 
-
+from langchain_core.tools import tool
 
 
 ######################################################################################################
 # MODEL
 
 # llm = ChatOpenAI(model="gpt-4o")
-llm = ChatOllama(model="llama3.1", temperature=1)
+llm = ChatOllama(model="llama3.1", temperature=0.3)
 
 # tools
+@tool
+def dummy_tool(rules: str):
+    """Dummy tool that returns the listed transformation rules."""
+    return {"transformation_rules": rules}
+
 search = TavilySearchAPIWrapper(tavily_api_key='')
 tavily_tool = TavilySearchResults(api_wrapper=search, max_results=5)
-tools = [tavily_tool]
+# tools = [tavily_tool]
+tools = [dummy_tool]
 tool_executor = ToolExecutor(tools=tools)
 
 
@@ -57,9 +63,8 @@ prompt_template = ChatPromptTemplate.from_messages(
     ]
 )
 
-initial_answer_chain = prompt_template | llm.bind_tools(tools=tools).with_config(
-    run_name="GenerateInitialCandidate"
-)
+initial_answer_chain = prompt_template | llm.bind_tools(tools=tools).with_config(run_name="GenerateInitialCandidate")
+# initial_answer_chain = prompt_template | llm.with_config(run_name="GenerateInitialCandidate")
 
 parser = JsonOutputToolsParser(return_id=True)
 
